@@ -21,13 +21,6 @@ web3.eth.getAccounts((err,res)=>{
 
 const register = (data) => new Promise((resolve, reject) => {
     web3.eth.personal.newAccount(data.password).then((result) => {
-        editeditems["Address"] = address; 
-        let userAddressAndEmail = {
-            'address': result,
-            'abi': data.email
-        };
-        fs.appendFileSync(path1, JSON.stringify(userAddressAndEmail, null, 4), { spaces: 2 });
-        resolve()
         web3.eth.sendTransaction({from:coinbase, to:result, value: 10000000000000000}).then((receipt) => {
             instance.methods.addUser(result,data.name,data.email).send({from:coinbase},function(err, res){
                 if(res){
