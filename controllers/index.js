@@ -5,7 +5,8 @@ const fs = require('fs');
 const jsonFile = require('jsonfile');
 const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 const path1 = path.join(__dirname, '../contractAddress/Election.json');
-const path1 = path.join(__dirname, '../contractAddress/userAddressAndContract.json');
+const location = path.join(__dirname, '../contractAddress/userAddress.json');
+const userAddress = jsonFile.readFileSync(location);
 const contractAddress = jsonFile.readFileSync(path1);
 const address = contractAddress.address;
 const abi = contractAddress.abi;
@@ -21,11 +22,16 @@ web3.eth.getAccounts((err,res)=>{
 
 const register = (data) => new Promise((resolve, reject) => {
     web3.eth.personal.newAccount(data.password).then((result) => {
+		userAddress[data.email] = {
+			'address': result,
+			'name': data.name
+		};
+		fs.writeFileSync(location, JSON.stringify(userAddress, null, 4), { spaces: 2 });
         web3.eth.sendTransaction({from:coinbase, to:result, value: 10000000000000000}).then((receipt) => {
             instance.methods.addUser(result,data.name,data.email).send({from:coinbase},function(err, res){
                 if(res){
                     console.log(res);
-                    resolve();
+                    resolve(res);
                 }
                 else{
                     reject();
@@ -40,7 +46,20 @@ const register = (data) => new Promise((resolve, reject) => {
     });
 });
 
+const login = (data) => new Promise ((resolve, reject) => {
+        let address = userAddress[data.username].address;
+        web3.eth.personal.unlockAccount(address,data.password,99, function(err, res) {
+            if(err){
+                reject();
+            }
+            else{
+                resolve(data.username);
+            }
+        });
+});
+
 const feedback = (data) => new Promise((resolve, reject) => {
+
         instance.methods.addFeedback(data.f1,data.f2,data.f3).send({from:coinbase},function(err, res){
             if(res){
                 console.log(res);
@@ -165,5 +184,6 @@ module.exports = {
     compiler,
     depoyContract,
     vote,
-    register
+    register,
+    login
 }

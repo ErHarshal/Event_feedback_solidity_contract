@@ -8,10 +8,24 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-    return res.render('/login', {
+    return res.render('allViews/login', {
                 'title': 'login',
                 'layout': 'main'
             });
+});
+
+router.post('/login', (req, res) => {
+    authCtr.login(req.body).then((result) => {
+        console.log("result-->",result)
+        res.json({
+            username:result,
+            message:"user login succesfully !!!"
+        })
+    }).catch((err) => {
+        res.json({
+            message:"login failed !!!"
+        })
+    });
 });
 
 router.get('/register', (req, res) => {
@@ -24,7 +38,13 @@ return res.render('allViews/register',{
 router.post('/register', (req, res) => {
     authCtr.register(req.body).then((result) => {
         console.log("result-->",result)
+        res.json({
+            message:"User registered successfully !!!"
+        })
     }).catch((err) => {
+        res.json({
+            message:"something went wrong while registering !!!"
+        })
         console.log("error-->",err)
     });
 });
