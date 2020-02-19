@@ -7,19 +7,23 @@ contract feedback {
         bool isRegister;
     }
     
-    int sumFeed1;
-    int sumFeed2;
-    int sumFeed3;
-    int numberOfUser = 0;
+    uint sumFeed1;
+    uint sumFeed2;
+    uint sumFeed3;
+    uint numberOfUser = 0;
     address owner;
-    constructor(){
-        owner = msg.sender;
+    uint public value;
+    uint public totalAvg;
+    address public instructor;
+    constructor (address _addr) payable{
+        owner = msg.sender;//instructor
+        instructor = _addr;
     }
     
     struct Feedback {
-        int f1;
-        int f2;
-        int f3;
+        uint f1;
+        uint f2;
+        uint f3;//uint
     }
 
     struct response {
@@ -52,7 +56,7 @@ contract feedback {
     _;
     }
     
-    function addFeedback(int _f1, int _f2, int _f3) public checkRegisterUser{
+    function addFeedback(uint _f1, uint _f2, uint _f3) public checkRegisterUser{
         numberOfUser = numberOfUser + 1;
         responses[msg.sender].opinion.f1=_f1;
         responses[msg.sender].opinion.f2=_f2;
@@ -67,7 +71,7 @@ contract feedback {
         return responses[msg.sender].isFeedbackGiven;
     }
     
-    function getFeedback() public view returns(int,int,int){
+    function getFeedback() public view returns(uint,uint,uint){
         return(responses[msg.sender].opinion.f1,responses[msg.sender].opinion.f2,responses[msg.sender].opinion.f3);
     }
     
@@ -77,24 +81,43 @@ contract feedback {
         user[_addr].isRegister = true;
     }
     
-    function getAverageFeedback() onlyOwner public view returns(int,int,int){
+    function getAverageFeedback() onlyOwner public view returns(uint,uint,uint){
         return (sumFeed1/numberOfUser,sumFeed2/numberOfUser,sumFeed3/numberOfUser);
     }
     
-    function transferMoneyToInstructor() onlyOwner public view returns(int) {
-        int totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
+    // function transferMoneyToInstructor() onlyOwner public payable {
+    //     uint totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
+    //     totalAvg = totalAvg % 5;
+    //     if(totalAvg == 1 )    
+    //         instructor.transfer(20);
+    //     else if(totalAvg == 2)
+    //         instructor.send(40);
+    //     else if(totalAvg == 3)
+    //         instructor.send(60);
+    //     else if(totalAvg == 4)
+    //         instructor.send(80);
+    //     else if(totalAvg == 5)
+    //     instructor.send(100);
+    // }
+    
+    function transferMoneyToInstructor() public payable returns (bool) {
+        totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
+        value;
         totalAvg = totalAvg % 5;
         if(totalAvg == 1 )    
-            return 20;
+            value = 20;
         else if(totalAvg == 2)
-            return 40;
+            value = 40;
         else if(totalAvg == 3)
-            return 60;
+            value = 60;
         else if(totalAvg == 4)
-            return 80;
+            value = 80;
         else if(totalAvg == 5)
-            return 100;
-        else 
-            return 0;
+            value = 100;
+             if (!address(instructor).send(value)) {
+         return false;
+        }
+            return true;
+                
     }
 }

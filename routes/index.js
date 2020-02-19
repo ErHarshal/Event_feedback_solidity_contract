@@ -49,6 +49,25 @@ router.post('/register', (req, res) => {
     });
 });
 
+router.get('/feedback',(req, res) => {
+return res.render('allViews/feedback',{
+    'title':'feedback',
+    'layout':'main'
+    });
+});
+
+router.post('/feedback', (req, res) => {
+    authCtr.feedback(req.body).then((result) => {
+        res.json({
+            message:"feedback given successfully !!!"
+        })  
+    }).catch((err) => {
+      res.json({
+          message:"something went wrong while giving feedback !!!"
+      })  
+    });
+});
+
 // router.get('/hello', (req, res) => {
 //     res.render('authentication/hello', {
 //         'title': 'hello',

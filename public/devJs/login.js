@@ -9,8 +9,14 @@ $(document).ready(() => {
             type:"POST",
             data:data,
             success:function(data) {
-                localStorage.setItem("username",data.username);
-                alert(data.message);
+                window.localStorage.setItem("username",data.username);
+                if(data.username === "Harshal@gmail.com"){
+                    window.location.href='/admin';
+                }
+                else{
+                    window.location.href='/feedback';
+                }
+                
             },
             error:function(data){
                 alert(data.message);

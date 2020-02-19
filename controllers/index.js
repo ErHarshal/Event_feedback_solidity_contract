@@ -48,7 +48,7 @@ const register = (data) => new Promise((resolve, reject) => {
 
 const login = (data) => new Promise ((resolve, reject) => {
         let address = userAddress[data.username].address;
-        web3.eth.personal.unlockAccount(address,data.password,99, function(err, res) {
+        web3.eth.personal.unlockAccount(address,data.password,9999, function(err, res) {
             if(err){
                 reject();
             }
@@ -59,14 +59,14 @@ const login = (data) => new Promise ((resolve, reject) => {
 });
 
 const feedback = (data) => new Promise((resolve, reject) => {
-
-        instance.methods.addFeedback(data.f1,data.f2,data.f3).send({from:coinbase},function(err, res){
+        let address = userAddress[data.username].address;
+        instance.methods.addFeedback(data.f1,data.f2,data.f3).send({from:address,gas:150000},function(err, res){
             if(res){
                 console.log(res);
-                resolve();
+                resolve(res);
             }
             else{
-                reject();
+                reject(err);
             }
         });
 });
@@ -97,16 +97,18 @@ const compiler = () => new Promise((resolve, reject)=>{
         console.log(abi1);
         console.log(abi1.toString());
         const gasEstimate = web3.eth.estimateGas({ data: '0x' + bytecode });
-        const contract = new web3.eth.Contract(abi1,res[0]);
+        const contract = new web3.eth.Contract(abi1,res[1]);
         // const instance = contract.deploy({data:'0x'+bytecode});
 
         contract.deploy({
-            data:'0x'+bytecode
+            data:'0x'+bytecode,
+            arguments:["0xe95d54702846fbfa9d23710f70eeb4693aca25f1"],
         })
         .send({
-            from: res[0],
-            gas: 1500000,
-            gasPrice: '300000'
+            from: res[1],
+            gasPrice: '300000',
+            gas:1500000,
+            value:100
         })
         .then(function(newContractInstance){
             console.log("newContractInstance",newContractInstance.options.address) // instance with the new contract address
@@ -115,6 +117,11 @@ const compiler = () => new Promise((resolve, reject)=>{
                 'abi': abi1
             };
             fs.writeFileSync(path1, JSON.stringify(contractAddress1, null, 4), { spaces: 2 });
+            userAddress["Harshal@gmail.com"] = {
+                'address': res[1],
+                'name': "Harshal Patil"
+            };
+            fs.writeFileSync(location, JSON.stringify(userAddress, null, 4), { spaces: 2 });
             resolve()
         });
         // console.log(instance);;
@@ -185,5 +192,6 @@ module.exports = {
     depoyContract,
     vote,
     register,
-    login
+    login,
+    feedback
 }
