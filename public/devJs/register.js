@@ -1,6 +1,6 @@
 $(document).ready(()=>{
     
-    $('#submit').on('click', () => {
+    $('#register').on('click', () => {
         let pswRepeat = document.getElementById('pswRepeat').value;
         if(pswRepeat === document.getElementById('psw').value)
         {
@@ -14,8 +14,7 @@ $(document).ready(()=>{
                 type:"POST",
                 data:data,
                 success: function(data) {
-                    alert(data.message);
-                    location.url="/login"
+                    window.location.href='/login';
                 },
                 error: function (data) {
                     alert(data.message);

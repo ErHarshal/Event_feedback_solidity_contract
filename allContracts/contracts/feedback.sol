@@ -12,8 +12,6 @@ contract feedback {
     uint sumFeed3;
     uint numberOfUser = 0;
     address owner;
-    uint public value;
-    uint public totalAvg;
     address public instructor;
     constructor (address _addr) payable{
         owner = msg.sender;//instructor
@@ -81,42 +79,28 @@ contract feedback {
         user[_addr].isRegister = true;
     }
     
-    function getAverageFeedback() onlyOwner public view returns(uint,uint,uint){
-        return (sumFeed1/numberOfUser,sumFeed2/numberOfUser,sumFeed3/numberOfUser);
+    function getAverageFeedback() onlyOwner public view returns(uint){
+        uint totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
+        totalAvg = totalAvg % 5;
+        totalAvg = totalAvg + 1;
+        return totalAvg;
     }
     
-    // function transferMoneyToInstructor() onlyOwner public payable {
-    //     uint totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
-    //     totalAvg = totalAvg % 5;
-    //     if(totalAvg == 1 )    
-    //         instructor.transfer(20);
-    //     else if(totalAvg == 2)
-    //         instructor.send(40);
-    //     else if(totalAvg == 3)
-    //         instructor.send(60);
-    //     else if(totalAvg == 4)
-    //         instructor.send(80);
-    //     else if(totalAvg == 5)
-    //     instructor.send(100);
-    // }
-    
-    function transferMoneyToInstructor() public payable returns (bool) {
-        totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
-        value;
+    function transferMoneyToInstructor() onlyOwner public payable returns (bool) {
+        uint totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
+        uint value;
         totalAvg = totalAvg % 5;
         if(totalAvg == 1 )    
-            value = 20;
+            value = 20 ether;
         else if(totalAvg == 2)
-            value = 40;
+            value = 40 ether;
         else if(totalAvg == 3)
-            value = 60;
+            value = 60 ether;
         else if(totalAvg == 4)
-            value = 80;
+            value = 80 ether;
         else if(totalAvg == 5)
-            value = 100;
-             if (!address(instructor).send(value)) {
-         return false;
-        }
+            value = 100 ether;
+             instructor.transfer(value);
             return true;
                 
     }

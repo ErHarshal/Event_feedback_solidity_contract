@@ -68,49 +68,27 @@ router.post('/feedback', (req, res) => {
     });
 });
 
-// router.get('/hello', (req, res) => {
-//     res.render('authentication/hello', {
-//         'title': 'hello',
-//         'layout': 'main'
-//     });
-// });
-// router.get('/election', (req, res) => {
-//     authCtr.depoyContract().then((result)=>{
-//         console.log("accounts-->",result);
-//         res.render('election/voting', {
-//             'title': 'hello',
-//             'layout': 'main',
-//             'data': result
-//         });
-//     }).catch((err)=>{
-//         console.log("Error-->",err);
-//     });
-// });
-
-router.get('/compiler', (req, res) => {
-    authCtr.compiler().then((result)=>{
-        console.log("accounts-->",result);
-        res.render('authentication/hello', {
-            'title': 'hello',
-            'layout': 'main'
+router.get('/admin', (req, res) => {
+    authCtr.avgFeedback().then((result) => {
+        return res.render('allViews/admin',{
+            title:"Admin",
+            layout:"main",
+            data:result
         });
-    }).catch((err)=>{
-        console.log("Error-->",err);
+    }).catch((err) => {
+
     });
 });
 
-// router.post('/vote', (req, res) => {
-//     authCtr.vote(req.body).then((result) => {
-//         res.json({
-//             hash:result,
-//             message:"voted successfully"
-//         })
-//         console.log("result-->",res);
-//     }).catch((err) => {
-//         console.log("Error-->",err);
-//         res.json({
-//             message:err.message
-//         })
-//     });
-// });
+router.post('/admin', (req, res) => {
+    authCtr.admin().then((result) => {
+        res.json({
+            message:"Funds are transfered !!!"
+        })
+    }).catch((err) => {
+        res.json({
+            message:"Funds are not transfer !!!"
+        })
+    });
+});
 module.exports = router;

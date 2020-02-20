@@ -1,0 +1,146 @@
+{
+    "address": "0x1bc005fCA33cADF941C5beeE9Ec077a477E9A818",
+    "abi": [
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "isFeedbackGivens",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function",
+            "signature": "0x42d75b56"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getAverageFeedback",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function",
+            "signature": "0x68727f9a"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "instructor",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function",
+            "signature": "0x71ae413d"
+        },
+        {
+            "constant": false,
+            "inputs": [],
+            "name": "transferMoneyToInstructor",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function",
+            "signature": "0x8249475d"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getFeedback",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function",
+            "signature": "0xc0b85f50"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_f1",
+                    "type": "uint256"
+                },
+                {
+                    "name": "_f2",
+                    "type": "uint256"
+                },
+                {
+                    "name": "_f3",
+                    "type": "uint256"
+                }
+            ],
+            "name": "addFeedback",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "signature": "0xc211812d"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_addr",
+                    "type": "address"
+                },
+                {
+                    "name": "_name",
+                    "type": "string"
+                },
+                {
+                    "name": "_email",
+                    "type": "string"
+                }
+            ],
+            "name": "addUser",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "signature": "0xd7554a68"
+        },
+        {
+            "inputs": [
+                {
+                    "name": "_addr",
+                    "type": "address"
+                }
+            ],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "constructor",
+            "signature": "constructor"
+        }
+    ]
+}

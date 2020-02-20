@@ -13,6 +13,9 @@ $(document).ready(() => {
                 if(data.username === "Harshal@gmail.com"){
                     window.location.href='/admin';
                 }
+                else if(data.message === "login failed !!!"){
+                    location.reload();
+                }
                 else{
                     window.location.href='/feedback';
                 }
