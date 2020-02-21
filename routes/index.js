@@ -16,6 +16,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
     authCtr.login(req.body).then((result) => {
+        req.session.username = result;
         console.log("result-->",result)
         res.json({
             username:result,
@@ -50,10 +51,17 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/feedback',(req, res) => {
-return res.render('allViews/feedback',{
-    'title':'feedback',
-    'layout':'main'
-    });
+    if(req.session.username !== undefined){
+        return res.render('allViews/feedback',{
+            'title':'feedback',
+            'layout':'main'
+        });   
+    }else{
+        return res.render('allViews/login', {
+            'title': 'login',
+            'layout': 'main'
+        });
+    }
 });
 
 router.post('/feedback', (req, res) => {
@@ -76,7 +84,9 @@ router.get('/admin', (req, res) => {
             data:result
         });
     }).catch((err) => {
-
+        res.json({
+            message:"something went wrong !!!"
+        });
     });
 });
 

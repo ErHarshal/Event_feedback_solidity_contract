@@ -1,5 +1,6 @@
 {
-    "address": "0x1bc005fCA33cADF941C5beeE9Ec077a477E9A818",
+    "contractAddress": "0x40A49891e29F787E3f9c1de7536f39b5A5FAF9db",
+    "instructorAddress": "0x2db82F876B10a25CCEbB4d7AB4d746ddaA73521F",
     "abi": [
         {
             "constant": true,

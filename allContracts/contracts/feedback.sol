@@ -90,6 +90,7 @@ contract feedback {
         uint totalAvg = sumFeed1/numberOfUser + sumFeed2/numberOfUser + sumFeed3/numberOfUser;
         uint value;
         totalAvg = totalAvg % 5;
+        totalAvg = totalAvg + 1;
         if(totalAvg == 1 )    
             value = 20 ether;
         else if(totalAvg == 2)

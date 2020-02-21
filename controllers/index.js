@@ -8,7 +8,7 @@ const path1 = path.join(__dirname, '../contractAddress/feedback.json');
 const location = path.join(__dirname, '../contractAddress/userAddress.json');
 const userAddress = jsonFile.readFileSync(location);
 const contractAddress = jsonFile.readFileSync(path1);
-const address = contractAddress.address;
+const address = contractAddress.contractAddress;
 const abi = contractAddress.abi;
 const instance = new web3.eth.Contract(abi,address);
 let coinbase;
@@ -83,38 +83,40 @@ const avgFeedback = () => new Promise((resolve, reject) => {
 });
 
 const admin = () => new Promise((resolve, reject) => {
-    // instance.methods.transferMoneyToInstructor().send({from:coinbase},function(err, res){
-    //     if(res){
-    //         resolve(res);
-    //     }
-    //     else{
-    //         reject(err);
-    //     }
-    // });
-    instance.methods.getAverageFeedback().call({from:coinbase},function(err, res){
+    instance.methods.transferMoneyToInstructor().send({from:coinbase,gas:230000},function(err, res){
         if(res){
-            let value;
-            if(res === "1")
-                value = 20;
-            else if(res === "2")
-                value = 40;
-            else if(res === "3")
-                value = 60;                
-            else if(res === "4")
-                value = 80;                
-            else if(res === "5")
-                value = 100;                
-            
-        web3.eth.sendTransaction({from:coinbase, to:"0xe95d54702846fbfa9d23710f70eeb4693aca25f1", value:value}).then((receipt) => {
-                resolve(receipt);
-            }).catch((err) => {
-                reject(err);
-            });
+            resolve(res);
         }
         else{
             reject(err);
         }
     });
+
+
+    // instance.methods.getAverageFeedback().call({from:coinbase},function(err, res){
+    //     if(res){
+    //         let value;
+    //         if(res === "1")
+    //             value = 20;
+    //         else if(res === "2")
+    //             value = 40;
+    //         else if(res === "3")
+    //             value = 60;                
+    //         else if(res === "4")
+    //             value = 80;                
+    //         else if(res === "5")
+    //             value = 100;                
+            
+    //     web3.eth.sendTransaction({from:coinbase, to:"0xe95d54702846fbfa9d23710f70eeb4693aca25f1", value:value}).then((receipt) => {
+    //             resolve(receipt);
+    //         }).catch((err) => {
+    //             reject(err);
+    //         });
+    //     }
+    //     else{
+    //         reject(err);
+    //     }
+    // });
 });
 
 module.exports = {

@@ -16,30 +16,42 @@ const userAddress = jsonFile.readFileSync(location);
     const abi1 = JSON.parse(output.contracts[':feedback'].interface);
     const gasEstimate = web3.eth.estimateGas({ data: '0x' + bytecode });
     const contract = new web3.eth.Contract(abi1,res[1]);
+    let instructor;
+    
+    web3.eth.personal.newAccount("").then((result) => {
+        instructor = result;
+        console.log("Instructor Address : ",instructor);
+        contract.deploy({
+            data:'0x'+bytecode,
+            arguments:[instructor],
+        })
+        .send({
+            from: res[1],
+            gasPrice: '300000',
+            gas:1500000,
+            value:120000000000000000000
+        })
+        .then(function(newContractInstance){
+            console.log("contract address:= >>>",newContractInstance.options.address) // instance with the new contract address
+           let contractAddress1 = {
+                'contractAddress': newContractInstance.options.address,
+                'instructorAddress':instructor,
+                'abi': abi1
+            };
+            fs.writeFileSync(path1, JSON.stringify(contractAddress1, null, 4), { spaces: 2 });
+            userAddress["Harshal@gmail.com"] = {
+                'address': res[1],
+                'name': "Harshal Patil"
+            };
+            fs.writeFileSync(location, JSON.stringify(userAddress, null, 4), { spaces: 2 });
+        }).catch((err) => {
+            console.log("error-->",err);    
+        });
 
-    contract.deploy({
-        data:'0x'+bytecode,
-        arguments:["0xe95d54702846fbfa9d23710f70eeb4693aca25f1"],
-    })
-    .send({
-        from: res[1],
-        gasPrice: '300000',
-        gas:1500000,
-        value:200
-    })
-    .then(function(newContractInstance){
-        console.log("contract address:= >>>",newContractInstance.options.address) // instance with the new contract address
-       let contractAddress1 = {
-            'address': newContractInstance.options.address,
-            'abi': abi1
-        };
-        fs.writeFileSync(path1, JSON.stringify(contractAddress1, null, 4), { spaces: 2 });
-        userAddress["Harshal@gmail.com"] = {
-            'address': res[1],
-            'name': "Harshal Patil"
-        };
-        fs.writeFileSync(location, JSON.stringify(userAddress, null, 4), { spaces: 2 });
+    }).catch((err) => {
+        console.log("error-->",err);
     });
+
 }).catch((err) => {
     console.log("error-->",err);
 });

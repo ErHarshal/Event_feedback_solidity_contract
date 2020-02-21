@@ -4,18 +4,25 @@ const hbs = require('express-handlebars');
 const app = express();
 var http = require('http');
 const bodyParser = require('body-parser');
+var session = require('express-session');
 
 const authentication = require('./routes/index');
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   'extended': false
 }));
-// app.use((req, res, next) => {
-//   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-//   next();
-// });
+
+app.use(session({
+  'secret': 'HarshaldPatil',
+  'key' : "uid",
+  'resave': true,
+  'saveUninitialized': false,
+  'cookie': { 
+    'secure': false,
+    'maxAge':180000
+ }
+}))
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -23,9 +30,6 @@ app.use('/', authentication);
 
 app.engine('hbs', hbs({
   'extname': 'hbs'
-  // defaultLayout: 'main',   //if you want you can specify
-  // partialsDir: path.join(__dirname, 'views/partials'),
-  // layoutsDir: path.join(__dirname, 'views/layouts')
 }));
 
 app.set('views', path.join(__dirname, 'views'));
